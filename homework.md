@@ -1,0 +1,12 @@
+- create a repository
+- initialize the repository
+- node_modules, package.json, pakckage_lock.json
+- install express
+- create a server
+- listen to posrt 7777
+- write request handlers for /test , /hello
+- install nodemon and update the scripts in package.json
+- what are dependencies 
+- what is the use of "-g" while pm install
+- diff btw ^ and ~ 
+
