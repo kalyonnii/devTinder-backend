@@ -32,10 +32,40 @@ const app = express();
 //     res.send("deleted successfully")
 // })
 
-app.get("/user/:userId/:name/:password", (req, res) => {
-    console.log(req.params)
-    res.send({ firstname: "kara", lastname: "bunny" })
-})
+// app.get("/user/:userId/:name/:password", (req, res) => {
+//     console.log(req.params)
+//     res.send({ firstname: "kara", lastname: "bunny" })
+// })
+
+app.use("/user", [
+    (req, res, next) => {
+        //route handler 1
+        console.log("reponse1 from console");
+        next();
+        // res.send("HAHAHAHAHAHAHAAHHA 1")
+    }, (req, res, next) => {
+        //route handler 2
+        console.log("reponse2 from console");
+        // res.send("HAHAHAHAHAHAHAAHHA 2")
+        next();
+    }],
+    (req, res, next) => {
+        //route handler 3
+        console.log("reponse3 from console");
+        // res.send("HAHAHAHAHAHAHAAHHA 3")
+        next();
+    },
+    (req, res, next) => {
+        //route handler 4
+        console.log("reponse4 from console");
+        // res.send("HAHAHAHAHAHAHAAHHA 4")
+        next();
+    },
+    (req, res, next) => {
+        //route handler 5
+        console.log("reponse5 from console");
+        res.send("HAHAHAHAHAHAHAAHHA 5")
+    })
 app.listen(7777, () => {
     console.log("Server is running on port 7777");
 })
