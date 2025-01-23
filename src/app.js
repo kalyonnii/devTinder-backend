@@ -1,7 +1,41 @@
 const express = require("express");
-const { adminAuth, userAuth } = require("./middlewares/auth.");
 
 const app = express();
+
+app.use("/",(err, req,res,next)=>{
+    if(err){
+        //log your error message 
+        res.status(500).send("something went wrong")
+    }
+}) 
+
+app.get("/getUserData", (req, res) => {
+    //logic of some db call and get user data 
+    // try{
+        throw new Error("something error ")
+        res.send("user data sent")
+    // }
+    // catch(err){
+    //     res.status(500).send("some error occured contact support team ")
+    // }
+   
+})
+app.use("/",(err, req,res,next)=>{
+    if(err){
+        //log your error message 
+        res.status(500).send("something went wrong")
+    }
+}) 
+
+
+
+
+
+
+
+app.listen(7777, () => {
+    console.log("Server is running on port 7777");
+})
 
 // this will match all the HTTP method  API calls to /test
 // app.use("/test", (req, res) => {
@@ -105,17 +139,17 @@ const app = express();
 // )
 
 //handle auth middleware  for all request  GET, POST .... ALL requests
-app.use("/admin", adminAuth)
+// app.use("/admin", adminAuth)
 // app.use("/user", userAuth)
 
 
 
 
-app.use("/admin/getallData", (req, res) => {
+// app.use("/admin/getallData", (req, res) => {
 
-    res.send("all data sent")
+//     res.send("all data sent")
 
-})
+// })
 // app.get("/admin/getallData", (req, res) => {
 //     //logic of checking if the request is authorized
 //     const token = "xyz";
@@ -130,12 +164,9 @@ app.use("/admin/getallData", (req, res) => {
 // app.use("/user", userAuth, (req, res) => {
 //     res.send("user data sent")
 // })
-app.post("/user/login", (req, res) => {
-    res.send("user loggedin")
-})
-app.get("/admin/deleteuser", (req, res) => {
-    res.send("Delete a user")
-})
-app.listen(7777, () => {
-    console.log("Server is running on port 7777");
-})
+// app.post("/user/login", (req, res) => {
+//     res.send("user loggedin")
+// })
+// app.get("/admin/deleteuser", (req, res) => {
+//     res.send("Delete a user")
+// })

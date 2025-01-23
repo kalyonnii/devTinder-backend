@@ -30,10 +30,9 @@
 - app.use("/route", [rh1, rh2], rh3, rh4, rh5)
 - app.use("/route", rh1, [rh2, rh3], rh4, rh5)
 
-
 - middleware
-- how expressjs basically handles requests  behind the scenes
+- how expressjs basically handles requests behind the scenes
 - APP.USE(),APP.ALL()
 - https://expressjs.com/en/guide/routing.html
 - write a dummy auth middleware for admin
-- write a dummy auth middleware for  all user routes, except /user/login
+- write a dummy auth middleware for all user routes, except /user/login
