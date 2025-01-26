@@ -1,41 +1,52 @@
 const express = require("express");
-
+const connectDB = require("./config/database");
+const User = require("./models/user");
 const app = express();
 
-app.use("/",(err, req,res,next)=>{
-    if(err){
-        //log your error message 
-        res.status(500).send("something went wrong")
-    }
-}) 
 
-app.get("/getUserData", (req, res) => {
-    //logic of some db call and get user data 
-    // try{
-        throw new Error("something error ")
-        res.send("user data sent")
-    // }
-    // catch(err){
-    //     res.status(500).send("some error occured contact support team ")
-    // }
+app.post("/signup",async(req,res)=>{
+    const userObj={
+        firstName:"id insert",
+        lastName:"id",
+        emailId:"id@gmail.com",
+        password:"id123",
+        _id:3434343
+    }
+    try{
+        const user = new User(userObj);
+        await user.save()
+        res.send("User Addedd Successfully.....")
+    }
+    catch(err){
+        res.status(400).send("Error in Creating User",err.message)
+    }
    
 })
-app.use("/",(err, req,res,next)=>{
-    if(err){
-        //log your error message 
-        res.status(500).send("something went wrong")
-    }
-}) 
 
-
-
-
-
-
-
-app.listen(7777, () => {
-    console.log("Server is running on port 7777");
+connectDB().then(() => {
+    console.log("Database connection established")
+    app.listen(7777, () => {
+        console.log("Server is running on port 7777");
+    })
+}).catch((err) => {
+    console.error("Database cannot be connected")
 })
+
+
+// app.listen(7777, () => {
+//     console.log("Server is running on port 7777");
+// })
+
+
+
+
+
+
+
+
+
+
+
 
 // this will match all the HTTP method  API calls to /test
 // app.use("/test", (req, res) => {
@@ -170,3 +181,29 @@ app.listen(7777, () => {
 // app.get("/admin/deleteuser", (req, res) => {
 //     res.send("Delete a user")
 // })
+
+
+// app.use("/",(err, req,res,next)=>{
+//     if(err){
+//         //log your error message 
+//         res.status(500).send("something went wrong")
+//     }
+// }) 
+
+// app.get("/getUserData", (req, res) => {
+//     //logic of some db call and get user data 
+//     // try{
+//         throw new Error("something error ")
+//         res.send("user data sent")
+//     // }
+//     // catch(err){
+//     //     res.status(500).send("some error occured contact support team ")
+//     // }
+   
+// })
+// app.use("/",(err, req,res,next)=>{
+//     if(err){
+//         //log your error message 
+//         res.status(500).send("something went wrong")
+//     }
+// }) 

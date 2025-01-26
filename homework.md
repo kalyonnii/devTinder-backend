@@ -36,3 +36,21 @@
 - https://expressjs.com/en/guide/routing.html
 - write a dummy auth middleware for admin
 - write a dummy auth middleware for all user routes, except /user/login
+
+
+
+- DATABASE
+-- mongodb+srv://namastedev:namastedev123@namastenode.edk5r.mongodb.net/   
+
+- create a freee cluster on momgodb official website (mongo atlas)
+- install mongoose library
+- connect your appplication to the database "connection-url"/devTinder
+- call the connectDB  function and connect to database before starting application
+- create a userSchema 
+- create a user model
+- create POST  /signup API to add data to database
+- push some documents using API calls from postman
+- error handling using try and catch 
+
+
+
