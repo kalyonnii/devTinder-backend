@@ -18,9 +18,9 @@ const userSchema = mongoose.Schema({
     gender: {
         type: String
     },
-    _id: {
-        type: Number // for id insert 
-    },
+    // _id: {
+    //     type: Number // for id insert 
+    // },
 })
 
 const User = mongoose.model("User", userSchema);

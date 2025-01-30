@@ -2,23 +2,27 @@ const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
 const app = express();
-
+app.use(express.json())
 
 app.post("/signup",async(req,res)=>{
-    const userObj={
-        firstName:"id insert",
-        lastName:"id",
-        emailId:"id@gmail.com",
-        password:"id123",
-        _id:3434343
-    }
+    // const userObj={
+    //     firstName:"K",
+    //     lastName:"JOHN",
+    //     emailId:"hdjfbd@gmail.com",
+    //     password:"65456456456",
+    //     // _id:3434343
+    // }
+
+    console.log(req.body)
+    const userObj = new User(req.body);
     try{
         const user = new User(userObj);
         await user.save()
         res.send("User Addedd Successfully.....")
     }
     catch(err){
-        res.status(400).send("Error in Creating User",err.message)
+        console.log(err)
+        res.status(400).send("Error in Creating User")
     }
    
 })

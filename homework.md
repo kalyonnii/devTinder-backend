@@ -53,4 +53,9 @@
 - error handling using try and catch 
 
 
+- javascript OBJECT  vs JSON (DIFFERENCE)
+- add the express.json middleware to the app 
+- makr your signup API dynamic to recive data  from the end user 
+
+
 
