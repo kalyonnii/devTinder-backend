@@ -12,7 +12,6 @@ app.post("/signup",async(req,res)=>{
     //     password:"65456456456",
     //     // _id:3434343
     // }
-
     console.log(req.body)
     const userObj = new User(req.body);
     try{
@@ -27,6 +26,73 @@ app.post("/signup",async(req,res)=>{
    
 })
 
+//get user by email 
+app.get("/user", async(req,res)=>{
+    console.log(req.body)
+    const userEmail = req.body.emailId
+    try {
+//    const users = await User.find({emailId:userEmail}) //Return one user to the match 
+const users = await User.findOne({emailId:userEmail}) //Return all the user to the match 
+   if(users.length===0){
+    res.status(404).send("User Not Found")
+   }else{
+    res.send(users)
+}
+}
+   catch(err){
+    res.status(400).send("user fetching error ")
+   }
+})
+
+
+app.get("/feed",async(req,res)=>{
+    try{
+        const feed = await User.find({})
+        res.send(feed)
+    }
+    catch(err){
+        res.status(400).send("Error in fetching Feed")
+    }
+})
+//GET USER
+app.get("/getbyid",async(req,res)=>{
+    try{
+        // const id = req.body.id
+        const user = await User.findById(3434343);
+        res.send(user)
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send("Error in fetching user by id")
+        }
+})
+//DELETE USER
+app.delete("/userdelete",async(req,res)=>{
+    try{
+        const id = req.body.id
+        // const user =await User.findByIdAndDelete(id);
+        const user =await User.findByIdAndDelete({_id:id});
+        res.status(200).send("User delted successfully")
+    }catch(err){
+        res.status(400).send("Error in deleting user", err.message)
+    }
+})
+
+
+//UPDATE USER
+
+app.patch("/signup",async(req,res)=>{
+    try{
+        const id = req.body.id
+        const user = await User.findByIdAndUpdate(id,req.body,{returnDocument:"after",runValidators:true},)
+        console.log(user)
+        res.status(200).send("user updated successfully")
+        }
+        catch(err){
+            console.log(err)
+            res.status(400).send("Error in updating user"+err.message)
+        }      
+})
 connectDB().then(() => {
     console.log("Database connection established")
     app.listen(7777, () => {

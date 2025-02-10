@@ -56,6 +56,22 @@
 - javascript OBJECT  vs JSON (DIFFERENCE)
 - add the express.json middleware to the app 
 - makr your signup API dynamic to recive data  from the end user 
+- User.findOne() with duplicate email ids which object it returns .
+- API - get user by email 
+- API - Feed Api- GET /feed - get all the users from the database
+- API - getuser  BY ID 
+- API - delete a user API
+- DIFF BTW PATCH AND PUT 
+- API - TO UPDATE A USER 
+- EXPLORE DOCUMENTATION FOR MODELS METHODS
+- OPTION IN  A MODEL.FINDONEANDUPDATE METHOD
+- API - UPDATES THE USER WITH EMAIL ID
 
 
+- EXPLORE SCHEMATYPE OPTIONS FROM THE DOCUMENTATION
+- add required, unique, lowercase, min, minLength, trim
+- add default value 
+- create e custom validator function for gender
+- improve the db schema -PUT all required validationson each field in schema 
+- add timestamps to the userSchema
 
