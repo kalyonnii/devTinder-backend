@@ -20,7 +20,7 @@ app.post("/signup", async (req, res) => {
         res.send("User Addedd Successfully.....");
     } catch (err) {
         console.log(err);
-        res.status(400).send("Error in Creating User");
+        res.status(400).send("Error in Creating User :" + err.message);
     }
 });
 
@@ -76,7 +76,7 @@ app.delete("/userdelete", async (req, res) => {
 
 app.patch("/user/:userId", async (req, res) => {
     // const UserId = req.body.userId;
-    const UserId =req.params.userId;
+    const UserId = req.params.userId;
     const data = req.body;
 
     try {
@@ -88,7 +88,7 @@ app.patch("/user/:userId", async (req, res) => {
             // res.status(400).send("Update not allowed");
             throw new Error("update not allowed");
         }
-        if(data?.skills.length > 10 ){
+        if (data?.skills.length > 10) {
             throw new Error("Skills cannot be more than 10");
         }
         const user = await User.findByIdAndUpdate(UserId, data, {
@@ -99,7 +99,7 @@ app.patch("/user/:userId", async (req, res) => {
         res.status(200).send("user updated successfully");
     } catch (err) {
         console.log(err);
-        res.status(400).send("Error in updating user" +  err.message);
+        res.status(400).send("Error in updating user" + err.message);
     }
 });
 connectDB()

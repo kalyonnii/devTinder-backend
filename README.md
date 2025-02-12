@@ -22,3 +22,6 @@ https://mongoosejs.com/docs/api/model.html
 https://mongoosejs.com/docs/api/model.html#Model.findByIdAndDelete()
 
 https://mongoosejs.com/docs/schematypes.html
+
+# npm validator 
+https://www.npmjs.com/package/validator
