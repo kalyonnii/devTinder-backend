@@ -2,9 +2,9 @@ const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
-app.post("/signup",async(req,res)=>{
+app.post("/signup", async (req, res) => {
     // const userObj={
     //     firstName:"K",
     //     lastName:"JOHN",
@@ -12,111 +12,110 @@ app.post("/signup",async(req,res)=>{
     //     password:"65456456456",
     //     // _id:3434343
     // }
-    console.log(req.body)
+    console.log(req.body);
     const userObj = new User(req.body);
-    try{
-        const user = new User(userObj);
-        await user.save()
-        res.send("User Addedd Successfully.....")
-    }
-    catch(err){
-        console.log(err)
-        res.status(400).send("Error in Creating User")
-    }
-   
-})
-
-//get user by email 
-app.get("/user", async(req,res)=>{
-    console.log(req.body)
-    const userEmail = req.body.emailId
     try {
-//    const users = await User.find({emailId:userEmail}) //Return one user to the match 
-const users = await User.findOne({emailId:userEmail}) //Return all the user to the match 
-   if(users.length===0){
-    res.status(404).send("User Not Found")
-   }else{
-    res.send(users)
-}
-}
-   catch(err){
-    res.status(400).send("user fetching error ")
-   }
-})
-
-
-app.get("/feed",async(req,res)=>{
-    try{
-        const feed = await User.find({})
-        res.send(feed)
+        const user = new User(userObj);
+        await user.save();
+        res.send("User Addedd Successfully.....");
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Error in Creating User");
     }
-    catch(err){
-        res.status(400).send("Error in fetching Feed")
+});
+
+//get user by email
+app.get("/user", async (req, res) => {
+    console.log(req.body);
+    const userEmail = req.body.emailId;
+    try {
+        //    const users = await User.find({emailId:userEmail}) //Return one user to the match
+        const users = await User.findOne({ emailId: userEmail }); //Return all the user to the match
+        if (users.length === 0) {
+            res.status(404).send("User Not Found");
+        } else {
+            res.send(users);
+        }
+    } catch (err) {
+        res.status(400).send("user fetching error ");
     }
-})
+});
+
+app.get("/feed", async (req, res) => {
+    try {
+        const feed = await User.find({});
+        res.send(feed);
+    } catch (err) {
+        res.status(400).send("Error in fetching Feed");
+    }
+});
 //GET USER
-app.get("/getbyid",async(req,res)=>{
-    try{
+app.get("/getbyid", async (req, res) => {
+    try {
         // const id = req.body.id
         const user = await User.findById(3434343);
-        res.send(user)
-        }
-        catch(err){
-            console.log(err)
-            res.status(400).send("Error in fetching user by id")
-        }
-})
-//DELETE USER
-app.delete("/userdelete",async(req,res)=>{
-    try{
-        const id = req.body.id
-        // const user =await User.findByIdAndDelete(id);
-        const user =await User.findByIdAndDelete({_id:id});
-        res.status(200).send("User delted successfully")
-    }catch(err){
-        res.status(400).send("Error in deleting user", err.message)
+        res.send(user);
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Error in fetching user by id");
     }
-})
-
+});
+//DELETE USER
+app.delete("/userdelete", async (req, res) => {
+    try {
+        const id = req.body.id;
+        // const user =await User.findByIdAndDelete(id);
+        const user = await User.findByIdAndDelete({ _id: id });
+        res.status(200).send("User delted successfully");
+    } catch (err) {
+        res.status(400).send("Error in deleting user", err.message);
+    }
+});
 
 //UPDATE USER
 
-app.patch("/signup",async(req,res)=>{
-    try{
-        const id = req.body.id
-        const user = await User.findByIdAndUpdate(id,req.body,{returnDocument:"after",runValidators:true},)
-        console.log(user)
-        res.status(200).send("user updated successfully")
-        }
-        catch(err){
-            console.log(err)
-            res.status(400).send("Error in updating user"+err.message)
-        }      
-})
-connectDB().then(() => {
-    console.log("Database connection established")
-    app.listen(7777, () => {
-        console.log("Server is running on port 7777");
-    })
-}).catch((err) => {
-    console.error("Database cannot be connected")
-})
+app.patch("/user/:userId", async (req, res) => {
+    // const UserId = req.body.userId;
+    const UserId =req.params.userId;
+    const data = req.body;
 
+    try {
+        const ALLOWED_UPDATES = ["userId", "photoUrl", "gender", "age", "skills"];
+        const isUpdateAllowed = Object.keys(data).every(k =>
+            ALLOWED_UPDATES.includes(k)
+        );
+        if (!isUpdateAllowed) {
+            // res.status(400).send("Update not allowed");
+            throw new Error("update not allowed");
+        }
+        if(data?.skills.length > 10 ){
+            throw new Error("Skills cannot be more than 10");
+        }
+        const user = await User.findByIdAndUpdate(UserId, data, {
+            returnDocument: "after",
+            runValidators: true
+        });
+        console.log(user);
+        res.status(200).send("user updated successfully");
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Error in updating user" +  err.message);
+    }
+});
+connectDB()
+    .then(() => {
+        console.log("Database connection established");
+        app.listen(7777, () => {
+            console.log("Server is running on port 7777");
+        });
+    })
+    .catch(err => {
+        console.error("Database cannot be connected");
+    });
 
 // app.listen(7777, () => {
 //     console.log("Server is running on port 7777");
 // })
-
-
-
-
-
-
-
-
-
-
-
 
 // this will match all the HTTP method  API calls to /test
 // app.use("/test", (req, res) => {
@@ -128,7 +127,6 @@ connectDB().then(() => {
 // app.use("/hello", (req, res) => {
 //     res.send("Hello Hello Hello")
 // })
-
 
 // app.use("/", (req, res) => {
 //     res.send("Hello from the Dashboard")
@@ -184,7 +182,6 @@ connectDB().then(() => {
 //         res.send("HAHAHAHAHAHAHAAHHA 5")
 //     })
 
-
 // app.use("/user",
 //     (req, res, next) => {
 //         //route handler 1
@@ -200,7 +197,6 @@ connectDB().then(() => {
 //         res.send("HAHAHAHAHAHAHAAHHA 2")
 //     },
 // )
-
 
 // app.get("/user",
 //     (req, res, next) => {
@@ -222,9 +218,6 @@ connectDB().then(() => {
 //handle auth middleware  for all request  GET, POST .... ALL requests
 // app.use("/admin", adminAuth)
 // app.use("/user", userAuth)
-
-
-
 
 // app.use("/admin/getallData", (req, res) => {
 
@@ -252,16 +245,15 @@ connectDB().then(() => {
 //     res.send("Delete a user")
 // })
 
-
 // app.use("/",(err, req,res,next)=>{
 //     if(err){
-//         //log your error message 
+//         //log your error message
 //         res.status(500).send("something went wrong")
 //     }
-// }) 
+// })
 
 // app.get("/getUserData", (req, res) => {
-//     //logic of some db call and get user data 
+//     //logic of some db call and get user data
 //     // try{
 //         throw new Error("something error ")
 //         res.send("user data sent")
@@ -269,11 +261,11 @@ connectDB().then(() => {
 //     // catch(err){
 //     //     res.status(500).send("some error occured contact support team ")
 //     // }
-   
+
 // })
 // app.use("/",(err, req,res,next)=>{
 //     if(err){
-//         //log your error message 
+//         //log your error message
 //         res.status(500).send("something went wrong")
 //     }
-// }) 
+// })

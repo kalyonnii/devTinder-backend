@@ -75,3 +75,5 @@
 - improve the db schema -PUT all required validationson each field in schema 
 - add timestamps to the userSchema
 
+- Add API level validation ON PATCH REQUEST , SIGNUP POST API 
+- add API validation for each field 
