@@ -66,7 +66,7 @@ app.post("/login", async (req, res) => {
         }
         // const isPassword = await bcrypt.compare(password, user.password)
 
-        const isPassword = await user.validatePassword(passswordInputByUser)
+        const isPassword = await user.validatePassword(password)
         if (isPassword) {
 
             // const token = jwt.sign({ _id: user._id }, "Simuleduco@1234", { expiresIn: '1h' })
