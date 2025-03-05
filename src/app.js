@@ -1,21 +1,51 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const User = require("./models/user");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+const {
+    validationSignUp
+} = require("./utils/validation");
+const cookieParser = require("cookie-parser");
+const { userAuth } = require("./middlewares/auth");
 const app = express();
 app.use(express.json());
+app.use(cookieParser())
+// app.post("/signup", async (req, res) => {
+//     // const userObj={
+//     //     firstName:"K",
+//     //     lastName:"JOHN",
+//     //     emailId:"hdjfbd@gmail.com",
+//     //     password:"65456456456",
+//     //     // _id:3434343
+//     // }
+//     console.log(req.body);
+//     const userObj = new User(req.body);
+//     try {
+//         const user = new User(userObj);
+//         await user.save();
+//         res.send("User Addedd Successfully.....");
+//     } catch (err) {
+//         console.log(err);
+//         res.status(400).send("Error in Creating User :" + err.message);
+//     }
+// });
 
 app.post("/signup", async (req, res) => {
-    // const userObj={
-    //     firstName:"K",
-    //     lastName:"JOHN",
-    //     emailId:"hdjfbd@gmail.com",
-    //     password:"65456456456",
-    //     // _id:3434343
-    // }
-    console.log(req.body);
-    const userObj = new User(req.body);
+    //validate data 
     try {
-        const user = new User(userObj);
+        validationSignUp(req)
+        //encrypt the password 
+        const { firstName, lastName, emailId, password } = req.body;
+        const passwordhash = await bcrypt.hash(password, 10);
+        console.log(passwordhash)
+        //create a new instance 
+        const user = new User({
+            firstName,
+            lastName,
+            emailId,
+            password: passwordhash
+        })
         await user.save();
         res.send("User Addedd Successfully.....");
     } catch (err) {
@@ -24,13 +54,90 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+
+app.post("/login", async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
+
+        const user = await User.findOne({ emailId: emailId })
+        if (!user) {
+            // throw new Error("EmailId Not  found in DB");
+            throw new Error("Invalid credentials");
+        }
+        // const isPassword = await bcrypt.compare(password, user.password)
+
+        const isPassword = await user.validatePassword(passswordInputByUser)
+        if (isPassword) {
+
+            // const token = jwt.sign({ _id: user._id }, "Simuleduco@1234", { expiresIn: '1h' })
+
+            const token = await user.getJWT();
+            // res.cookie("token", "dajfgcahaxskjhdiuj8574567465846343564687dfajfhchjgdh")
+            res.cookie("token", token, {
+                expires: new Date(Date.now() + 1 * 3600000) //expires in  1 hours
+            })
+
+
+            res.status(200).send("Login Successfull");
+        } else {
+            // throw new Error("password is incorrect")
+            throw new Error("Invalid credentials");
+        }
+    }
+    catch (err) {
+        res.status(400).send("Error in Login: " + err.message);
+    }
+})
+app.get("/profile", userAuth, async (req, res) => {
+    try {
+
+        // IN MIDDLEWARE I HAVE THIS CODE
+        // const cookies = req.cookies;
+
+        // const { token } = cookies;
+        // if (!token) {
+        //     return res.status(401).send("invalid token");
+        // }
+        // const decodedMsg = await jwt.verify(token, "Simuleduco@1234")
+
+        // console.log(decodedMsg)
+
+        // const { _id } = decodedMsg;
+        // console.log("Logged in User is: " + _id)
+
+        // const user = await User.findById(_id);
+
+        const user = req.user;
+        if (!user) {
+            return res.status(401).send("user does not exists");
+        }
+        // console.log(token)
+        res.send(user)
+    } catch (err) {
+        res.status(400).send("Error in Profile: " + err.message)
+    }
+})
+
+
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+
+    const user = req.user;
+    if (!user) {
+        return res.status(401).send("User does not exists");
+    }
+    console.log("send connection request")
+    res.status(200).send(user.firstName + " sent connection request")
+})
+
 //get user by email
 app.get("/user", async (req, res) => {
     console.log(req.body);
     const userEmail = req.body.emailId;
     try {
         //    const users = await User.find({emailId:userEmail}) //Return one user to the match
-        const users = await User.findOne({ emailId: userEmail }); //Return all the user to the match
+        const users = await User.findOne({
+            emailId: userEmail
+        }); //Return all the user to the match
         if (users.length === 0) {
             res.status(404).send("User Not Found");
         } else {
@@ -65,7 +172,9 @@ app.delete("/userdelete", async (req, res) => {
     try {
         const id = req.body.id;
         // const user =await User.findByIdAndDelete(id);
-        const user = await User.findByIdAndDelete({ _id: id });
+        const user = await User.findByIdAndDelete({
+            _id: id
+        });
         res.status(200).send("User delted successfully");
     } catch (err) {
         res.status(400).send("Error in deleting user", err.message);
