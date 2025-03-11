@@ -98,3 +98,8 @@
 
 - create userschema method to getJWT() 
 -  create a userschema method to validatePassword(passswordInputByUser);
+
+- explore read documentation for express.Router()
+- create routes folder for managing auth, profile, requests folder
+- create a profile router , authrouter , requestrouter
+- import these routs in app.js
