@@ -1,10 +1,13 @@
-const  express= require("express");
+const express = require("express");
 const { userAuth } = require("../middlewares/auth");
-const profileRouter=express.Router();
+const { validateEditProfileData } = require("../utils/validation")
+const profileRouter = express.Router();
+const validator = require("validator")
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
 
 
-
-profileRouter.get("/profile", userAuth, async (req, res) => {
+profileRouter.get("/profile/view", userAuth, async (req, res) => {
     try {
 
         // IN MIDDLEWARE I HAVE THIS CODE
@@ -34,4 +37,51 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
     }
 })
 
-module.exports=profileRouter;
+
+profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+    try {
+        if (!validateEditProfileData(req)) {
+            throw new Error("Invalid edit request ")
+        }
+        const loggedInUser = req.user;
+        // console.log(loggedInUser)
+
+        Object.keys(req.body).forEach(key => (loggedInUser[key] = req.body[key]))
+        // console.log(loggedInUser)
+
+        await loggedInUser.save()
+        // res.status(200).send(`${loggedInUser.firstName} Proile updated successfully`)
+        res.json({
+            message: `${loggedInUser.firstName} Proile updated successfully`,
+            user: loggedInUser
+        })
+    }
+    catch (err) {
+        res.status(400).send("Error in profile edit " + err.message)
+    }
+})
+
+profileRouter.patch("/profile/password", userAuth, async (req, res) => {
+    try {
+        const { password, emailId } = req.body;
+        const user = await User.findOne({ emailId: emailId })
+        if (!user) {
+            // throw new Error("EmailId Not  found in DB");
+            throw new Error("Invalid credentials");
+        }
+        const isPasswordValid = validator.isStrongPassword(password);
+        if (!isPasswordValid) {
+            throw new Error("Please enter strong password")
+        }
+        const passwordhash = await bcrypt.hash(password, 10)
+        const loggedInUser= req.user
+        loggedInUser.password = passwordhash
+        await loggedInUser.save()
+        res.status(200).send(`${loggedInUser.firstName} Password updated successfully`)
+
+    }
+    catch (err) {
+        res.status(400).send("Error in profile edit password " + err.message)
+    }
+})
+module.exports = profileRouter;

@@ -81,25 +81,40 @@
 - install bcrypt package
 - create a password hash using bcrpt.hash
 - save the user with encrypted password
-- create login api 
-- comapre passwords throw a error if mail and password is not correct 
+- create login api
+- comapre passwords throw a error if mail and password is not correct
 
 - install cookie-parser
 - just send a dummy cookie to user
-- creat a get /profile API and check if you get the cookie back 
+- creat a get /profile API and check if you get the cookie back
 - install jsonwebtoken
 - in login API after email and password validation create a JWT token and send it to user in cookies
-- read the cookies inside your profile API and find the logged in user 
+- read the cookies inside your profile API and find the logged in user
 
+-- userauth middleware
 
--- userauth  middleware
-- add the userauth middlware  in profile API and a new send connection request API
--  set the expiry of jwt token and cookies  to 7 days 
+- add the userauth middlware in profile API and a new send connection request API
+- set the expiry of jwt token and cookies to 7 days
 
-- create userschema method to getJWT() 
--  create a userschema method to validatePassword(passswordInputByUser);
+- create userschema method to getJWT()
+- create a userschema method to validatePassword(passswordInputByUser);
 
 - explore read documentation for express.Router()
 - create routes folder for managing auth, profile, requests folder
 - create a profile router , authrouter , requestrouter
 - import these routs in app.js
+- create post/logout API
+- create patch/profile API
+- test all APIS
+- create a update password API ==> FORGOT PASSWORD API
+  -MAKE SURE U VALIDATE ALL DATA IN EVERY POST PATCH REQUEST
+-
+
+- create a connection request schema
+- send connection request API
+- proper validation of data
+- $or , $and query
+- read more about indexes in mongoDB
+- WHY do we need index in DB
+- schema.pre("save")
+- what is the advantage and disadavantage of creating

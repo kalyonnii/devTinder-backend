@@ -52,3 +52,18 @@ https://expressjs.com/en/api.html#res.cookie
 
 # express router 
 https://expressjs.com/en/api.html#express.router
+
+# enum  in mongoose
+https://mongoosejs.com/docs/validation.html
+
+# creating index in database
+https://mongoosejs.com/docs/schematypes.html
+
+# Index 
+https://mongoosejs.com/docs/api/schematype.html#SchemaType.prototype.index()
+
+# compound indexes 
+https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
+
+# $or 
+https://www.mongodb.com/docs/manual/reference/operator/query-logical/
